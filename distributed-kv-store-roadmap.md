@@ -102,8 +102,8 @@ Each top-level Part maps to a specific *question* the whole project is answering
 Each step below is small enough to finish in a single sitting (1–3 hours). Check them off as you go — this is your literal progress tracker.
 
 ### Part A — Foundation
-- [ ] A1.1 — Build a basic `GET`/`PUT`/`DELETE` HTTP API backed by an in-memory Go map
-- [ ] A1.2 — Add a simple CLI or `curl`-based test script to exercise it
+- [Done] A1.1 — Build a basic `GET`/`PUT`/`DELETE` HTTP API backed by an in-memory Go map
+- [Done] A1.2 — Add a simple CLI or `curl`-based test script to exercise it
 - [ ] A1.3 — Containerize it (one `Dockerfile`, runs as a single node)
 
 *Concept learned: how a minimal key-value store's read/write path works before any distribution is introduced.*
