@@ -102,14 +102,14 @@ Each top-level Part maps to a specific *question* the whole project is answering
 Each step below is small enough to finish in a single sitting (1–3 hours). Check them off as you go — this is your literal progress tracker.
 
 ### Part A — Foundation
-- [Done] A1.1 — Build a basic `GET`/`PUT`/`DELETE` HTTP API backed by an in-memory Go map
-- [Done] A1.2 — Add a simple CLI or `curl`-based test script to exercise it
-- [ ] A1.3 — Containerize it (one `Dockerfile`, runs as a single node)
+- ✅ A1.1 — Build a basic `GET`/`PUT`/`DELETE` HTTP API backed by an in-memory Go map
+- ✅ A1.2 — Add a simple CLI or `curl`-based test script to exercise it
+- ✅ A1.3 — Containerize it (one `Dockerfile`, runs as a single node)
 
 *Concept learned: how a minimal key-value store's read/write path works before any distribution is introduced.*
 
 ### Part B — Going Distributed
-- [ ] B1.1 — Implement consistent hashing to map keys → nodes
+- ✅ B1.1 — Implement consistent hashing to map keys → nodes
 - [ ] B1.2 — Set up Docker Compose to run 3–5 node instances simultaneously
 - [ ] B1.3 — Route client requests to the correct node based on the hash ring
 - [ ] B2.1 — Implement synchronous replication (write to N replicas)

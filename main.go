@@ -2,17 +2,38 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
-) 
+)
 
 func main() {
 	store := NewStore()
+	cluster := NewCluster()
 
 	http.HandleFunc("/kv/", func(w http.ResponseWriter, r *http.Request) {
 		key := r.URL.Path[len("/kv/"):]
 		if key == "" {
 			http.Error(w, "Key is required", http.StatusBadRequest)
+			return
+		}
+
+		if !cluster.IsOwner(key) {
+			ownerURL, ok := cluster.OwnerURL(key)
+			if !ok {
+				http.Error(w, "Owner not found", http.StatusInternalServerError)
+				return
+			}
+
+			body, _ := io.ReadAll(r.Body)
+			resp, err := cluster.Forward(ownerURL, r.Method, r.URL.Path, body)
+			if err != nil {
+				http.Error(w, "Failed to forward request: "+err.Error(), http.StatusBadGateway)
+				return
+			}
+			defer resp.Body.Close()
+			w.WriteHeader(resp.StatusCode)
+			io.Copy(w, resp.Body)
 			return
 		}
 
@@ -39,7 +60,7 @@ func main() {
 		case http.MethodDelete:
 			store.Delete(key)
 			w.WriteHeader(http.StatusOK)
-		
+
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
