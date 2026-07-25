@@ -110,8 +110,8 @@ Each step below is small enough to finish in a single sitting (1–3 hours). Che
 
 ### Part B — Going Distributed
 - ✅ B1.1 — Implement consistent hashing to map keys → nodes
-- [ ] B1.2 — Set up Docker Compose to run 3–5 node instances simultaneously
-- [ ] B1.3 — Route client requests to the correct node based on the hash ring
+- ✅ B1.2 — Set up Docker Compose to run 3–5 node instances simultaneously
+- ✅ B1.3 — Route client requests to the correct node based on the hash ring
 - [ ] B2.1 — Implement synchronous replication (write to N replicas)
 - [ ] B2.2 — Kill a node mid-write manually and observe what happens (this is where the real learning starts)
 - [ ] B3.1 — Implement quorum-based reads/writes (e.g. W=2, R=2 out of N=3)

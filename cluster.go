@@ -14,7 +14,7 @@ type Cluster struct {
 }
 
 func NewCluster() *Cluster {
-	selfID := os.Getenv("NODE-ID")
+	selfID := os.Getenv("NODE_ID")
 	if selfID == "" {
 		selfID = "node-a"
 	}
