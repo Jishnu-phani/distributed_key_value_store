@@ -77,6 +77,39 @@ func (hr *HashRing) GetNode(key string) (string, bool) {
 	return hr.ring[hr.sortedKeys[idx]], true
 }
 
+// GetNodes returns up to n distinct physical nodes responsible for key,
+// walking clockwise around the ring starting at the key's hash position.
+func (hr *HashRing) GetNodes(key string, n int) []string {
+	hr.mu.RLock()
+	defer hr.mu.RUnlock()
+
+	if len(hr.sortedKeys) == 0 {
+		return nil
+	}
+
+	target := hashKey(key)
+	startIdx := sort.Search(len(hr.sortedKeys), func(i int) bool {
+		return hr.sortedKeys[i] >= target
+	})
+	if startIdx == len(hr.sortedKeys) {
+		startIdx = 0
+	}
+
+	seen := map[string]bool{}
+	var result []string
+
+	for i := 0; i < len(hr.sortedKeys) && len(result) < n; i++ {
+		idx := (startIdx + i) % len(hr.sortedKeys)
+		node := hr.ring[hr.sortedKeys[idx]]
+		if !seen[node] {
+			seen[node] = true
+			result = append(result, node)
+		}
+	}
+
+	return result
+}
+
 func (hr *HashRing) rebuildSortedKeys() {
 	hr.sortedKeys = hr.sortedKeys[:0]
 	for k := range hr.ring {
