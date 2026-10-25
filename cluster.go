@@ -7,13 +7,12 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type Cluster struct {
-	selfID string
-	peers  map[string]string
-	ring   *HashRing
+	selfID  string
+	peers   map[string]string
+	ring    *HashRing
 	N, W, R int
 }
 
@@ -62,7 +61,9 @@ func (c *Cluster) ReplicaNodes(key string) []string {
 	return c.ring.GetNodes(key, c.N)
 }
 
-var httpClient = &http.Client{Timeout: 3 * time.Second}
+// httpClient is the mTLS-enabled client for all node-to-node calls.
+// It is built in main() via newPeerHTTPClient() because it needs the cert files.
+var httpClient *http.Client
 
 // replicatePut sends a versioned value to one replica's internal endpoint.
 func (c *Cluster) replicatePut(nodeID, key string, vv VersionedValue) error {
@@ -88,22 +89,22 @@ func (c *Cluster) replicatePut(nodeID, key string, vv VersionedValue) error {
 }
 
 // replicateGet fetches a versioned value from one replica's internal endpoint.
-func (c *Cluster) replicateGet(nodeID, key string) (VersionedValue, bool, error) {
+func (c *Cluster) replicateGet(nodeID, key string) ([]VersionedValue, bool, error) {
 	url := c.peers[nodeID] + "/internal/kv/" + key
 	resp, err := httpClient.Get(url)
 	if err != nil {
-		return VersionedValue{}, false, err
+		return []VersionedValue{}, false, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusNotFound {
-		return VersionedValue{}, false, nil
+		return []VersionedValue{}, false, nil
 	}
 	if resp.StatusCode != http.StatusOK {
-		return VersionedValue{}, false, errStatus(resp.StatusCode)
+		return []VersionedValue{}, false, errStatus(resp.StatusCode)
 	}
-	var vv VersionedValue
+	var vv []VersionedValue
 	if err := json.NewDecoder(resp.Body).Decode(&vv); err != nil {
-		return VersionedValue{}, false, err
+		return []VersionedValue{}, false, err
 	}
 	return vv, true, nil
 }

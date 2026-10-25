@@ -3,7 +3,19 @@ services:
     build: .
     environment:
       - NODE_ID=node-a
-      - PEERS=node-a=http://node-a:8080,node-b=http://node-b:8080,node-c=http://node-c:8080
+      - PEERS=node-a=https://node-a:8080,node-b=https://node-b:8080,node-c=https://node-c:8080
+      - REPLICATION_FACTOR=3
+      - WRITE_QUORUM=2
+      - READ_QUORUM=2
+      - TLS_CERT_FILE=/certs/node-a-cert.pem
+      - TLS_KEY_FILE=/certs/node-a-key.pem
+      - TLS_CA_FILE=/certs/ca-cert.pem
+    volumes:
+      # Only the three files this node needs. ca-key.pem and the other nodes'
+      # private keys are deliberately NOT mounted into this container.
+      - ./certs/ca-cert.pem:/certs/ca-cert.pem:ro
+      - ./certs/node-a-cert.pem:/certs/node-a-cert.pem:ro
+      - ./certs/node-a-key.pem:/certs/node-a-key.pem:ro
     ports:
       - "8081:8080"
 
@@ -11,7 +23,17 @@ services:
     build: .
     environment:
       - NODE_ID=node-b
-      - PEERS=node-a=http://node-a:8080,node-b=http://node-b:8080,node-c=http://node-c:8080
+      - PEERS=node-a=https://node-a:8080,node-b=https://node-b:8080,node-c=https://node-c:8080
+      - REPLICATION_FACTOR=3
+      - WRITE_QUORUM=2
+      - READ_QUORUM=2
+      - TLS_CERT_FILE=/certs/node-b-cert.pem
+      - TLS_KEY_FILE=/certs/node-b-key.pem
+      - TLS_CA_FILE=/certs/ca-cert.pem
+    volumes:
+      - ./certs/ca-cert.pem:/certs/ca-cert.pem:ro
+      - ./certs/node-b-cert.pem:/certs/node-b-cert.pem:ro
+      - ./certs/node-b-key.pem:/certs/node-b-key.pem:ro
     ports:
       - "8082:8080"
 
@@ -19,6 +41,16 @@ services:
     build: .
     environment:
       - NODE_ID=node-c
-      - PEERS=node-a=http://node-a:8080,node-b=http://node-b:8080,node-c=http://node-c:8080
+      - PEERS=node-a=https://node-a:8080,node-b=https://node-b:8080,node-c=https://node-c:8080
+      - REPLICATION_FACTOR=3
+      - WRITE_QUORUM=2
+      - READ_QUORUM=2
+      - TLS_CERT_FILE=/certs/node-c-cert.pem
+      - TLS_KEY_FILE=/certs/node-c-key.pem
+      - TLS_CA_FILE=/certs/ca-cert.pem
+    volumes:
+      - ./certs/ca-cert.pem:/certs/ca-cert.pem:ro
+      - ./certs/node-c-cert.pem:/certs/node-c-cert.pem:ro
+      - ./certs/node-c-key.pem:/certs/node-c-key.pem:ro
     ports:
       - "8083:8080"

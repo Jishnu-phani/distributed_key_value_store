@@ -112,12 +112,12 @@ Each step below is small enough to finish in a single sitting (1–3 hours). Che
 - ✅ B1.1 — Implement consistent hashing to map keys → nodes
 - ✅ B1.2 — Set up Docker Compose to run 3–5 node instances simultaneously
 - ✅ B1.3 — Route client requests to the correct node based on the hash ring
-- [ ] B2.1 — Implement synchronous replication (write to N replicas)
-- [ ] B2.2 — Kill a node mid-write manually and observe what happens (this is where the real learning starts)
-- [ ] B3.1 — Implement quorum-based reads/writes (e.g. W=2, R=2 out of N=3)
-- [ ] B3.2 — Simulate a network partition (e.g. using Docker network rules) and test availability behavior
-- [ ] B4.1 — Add vector clocks to each stored value
-- [ ] B4.2 — Force a write conflict (two nodes write the same key while partitioned) and resolve it on reconciliation
+- ✅ B2.1 — Implement synchronous replication (write to N replicas)
+- ✅ B2.2 — Kill a node mid-write manually and observe what happens (this is where the real learning starts)
+- ✅ B3.1 — Implement quorum-based reads/writes (e.g. W=2, R=2 out of N=3)
+- ✅ B3.2 — Simulate a network partition (e.g. using Docker network rules) and test availability behavior
+- ✅ B4.1 — Add vector clocks to each stored value
+- ✅ B4.2 — Force a write conflict (two nodes write the same key while partitioned) and resolve it on reconciliation
 
 *Concepts learned: consistent hashing, CAP theorem trade-offs in practice, synchronous replication, quorum principle, vector clocks, conflict resolution.*
 
